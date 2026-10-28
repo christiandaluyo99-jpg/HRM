@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f7f2">
+    <meta name="description" content="A thoughtful front desk for managing hotel reservations, room availability, and guest arrivals.">
+    <title>Housekeeping Desk | The Aster</title>
+    <link rel="icon" type="image/png" href="assets/the-aster-logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <section class="login-screen" id="admin-login" aria-labelledby="login-title">
+      <div class="login-layout">
+        <div class="login-visual" role="img" aria-label="A quiet, sunlit guest room at The Aster">
+          <a class="brand login-brand" href="#login" aria-label="The Aster home">
+            <img class="brand-logo" src="assets/the-aster-logo.png" alt="The Aster, Manila">
+          </a>
+          <div class="login-caption"><span class="overline">A BOUTIQUE HOTEL IN MANILA</span><h1>Make room for <em>something lovely.</em></h1><p>A thoughtful stay begins with a thoughtful welcome.</p></div>
+          <span class="login-image-credit">THE ASTER · MANILA</span>
+        </div>
+        <div class="login-main">
+          <button class="icon-button theme-toggle login-theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false"><i data-lucide="moon"></i></button>
+          <div class="login-form-wrap">
+            <div class="login-kicker"><span class="login-kicker-mark"><i data-lucide="key-round"></i></span><span>ADMIN PORTAL</span></div>
+            <p class="overline">GOOD TO SEE YOU AGAIN</p>
+            <h2 id="login-title">Welcome back.</h2>
+            <p class="login-intro">Sign in to manage reservations and guest stays.</p>
+            <form id="admin-login-form" class="admin-login-form">
+              <label class="login-field"><span>Email address</span><span class="login-input-wrap"><i data-lucide="mail" aria-hidden="true"></i><input id="admin-email" name="email" type="email" autocomplete="username" placeholder="you@theaster.com" required></span></label>
+              <label class="login-field"><span>Password</span><span class="login-input-wrap"><i data-lucide="lock-keyhole" aria-hidden="true"></i><input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" minlength="8" required><button class="password-toggle" id="toggle-password" type="button" aria-label="Show password" aria-pressed="false"><i data-lucide="eye"></i></button></span></label>
+              <div class="login-error" id="login-error" role="alert" hidden>That email and password don’t match an admin account.</div>
+              <button class="primary-button login-submit" type="submit"><span>Sign in to your desk</span><i data-lucide="arrow-right"></i></button>
+            </form>
+          </div>
+          <span class="login-footer">THE ASTER · MANILA, PHILIPPINES</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="app-shell" id="app-shell" hidden>
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#view-overview" data-view-nav="overview" aria-label="The Aster home">
+          <img class="brand-logo" src="assets/the-aster-logo.png" alt="The Aster, Manila">
+        </a>
+
+        <div class="property-switcher">
+          <div class="property-thumb" role="img" aria-label="The Aster hotel in Manila, Philippines"></div>
+          <div class="property-copy">
+            <span class="eyebrow">PROPERTY</span>
+            <strong>The Aster</strong>
+            <span>Manila, Philippines</span>
+          </div>
+          <i data-lucide="chevrons-up-down" class="switch-icon" aria-hidden="true"></i>
+        </div>
+
+        <span class="nav-label">WORKSPACE</span>
+        <nav class="nav-list">
+          <div class="nav-group" id="overview-nav-group">
+            <a class="nav-link active" href="#view-overview" data-view-nav="overview" aria-current="page" aria-expanded="false" aria-controls="overview-subnav"><i data-lucide="layout-dashboard"></i><span>Overview</span><i class="nav-chevron" data-lucide="chevron-down" aria-hidden="true"></i></a>
+            <div class="nav-submenu" id="overview-subnav" hidden>
+              <a class="nav-submenu-link" href="#overview-dashboard" data-view-section-link="overview-dashboard">Today at a glance</a>
+              <a class="nav-submenu-link" href="#analytics-metrics" data-view-section-link="analytics-metrics">Analytics · Performance metrics</a>
+              <a class="nav-submenu-link" href="#analytics-revenue-chart" data-view-section-link="analytics-revenue-chart">Analytics · Revenue by room type</a>
+            </div>
+          </div>
+          <a class="nav-link" href="#view-reservations" data-view-nav="reservations"><i data-lucide="calendar-days"></i><span>Reservations</span><span class="nav-count" id="nav-reservation-count">0</span></a>
+          <a class="nav-link" href="#view-rooms" data-view-nav="rooms"><i data-lucide="door-open"></i><span>Rooms</span></a>
+          <a class="nav-link" href="#view-guests" data-view-nav="guests"><i data-lucide="contact-round"></i><span>Guests</span></a>
+          <div class="nav-group" id="administrator-nav-group">
+            <a class="nav-link" href="#view-administrator" data-view-nav="administrator" aria-expanded="false" aria-controls="administrator-subnav"><i data-lucide="shield-user"></i><span>Administrator</span><i class="nav-chevron" data-lucide="chevron-down" aria-hidden="true"></i></a>
+            <div class="nav-submenu" id="administrator-subnav" hidden>
+              <a class="nav-submenu-link" href="#admin-profile-panel" data-admin-section="admin-profile-panel">Profile</a>
+              <a class="nav-submenu-link" href="#admin-tools-panel" data-admin-section="admin-tools-panel">Property tools</a>
+              <a class="nav-submenu-link" href="#admin-account-panel" data-admin-section="admin-account-panel">Create another admin</a>
+              <a class="nav-submenu-link" href="#admin-checked-in-panel" data-admin-section="admin-checked-in-panel">Checked-in guests</a>
+              <a class="nav-submenu-link" href="#admin-activity-panel" data-admin-section="admin-activity-panel">Activity history</a>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <button class="profile-button" id="logout-button" type="button" aria-label="Sign out Alex Morgan" title="Sign out">
+            <span class="avatar" id="sidebar-admin-avatar">AM</span>
+            <span class="profile-copy"><strong id="sidebar-admin-name">Alex Morgan</strong><span id="sidebar-admin-position">Front desk administrator · Sign out</span></span>
+            <i data-lucide="log-out" aria-hidden="true"></i>
+          </button>
+          <button class="sidebar-theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false"><i data-lucide="moon"></i><span class="theme-mode-label">Dark mode</span></button>
+        </div>
+      </aside>
+
+      <main class="main-content" id="dashboard">
+        <header class="topbar">
+          <div class="breadcrumb"><span>THE ASTER</span><i data-lucide="chevron-right" aria-hidden="true"></i><strong id="current-view-label">OVERVIEW</strong></div>
+          <div class="topbar-actions">
+            <span class="today-label"><i data-lucide="calendar-days" aria-hidden="true"></i><span id="today-date"></span></span>
+          </div>
+        </header>
+
+        <div class="page-wrap">
+          <section class="page-view" id="view-overview" data-page-view="overview" aria-labelledby="welcome-title">
+          <div id="overview-dashboard" data-view-section="overview">
+          <section class="welcome-row" aria-labelledby="welcome-title">
+            <div>
+              <p class="overline"><span class="live-dot"></span> YOUR FRONT DESK, AT A GLANCE</p>
+              <h1 id="welcome-title">Alex Morgan</h1>
+              <p class="welcome-subtitle"><span id="welcome-role">Front desk administrator</span><span aria-hidden="true">·</span><span id="welcome-date"></span></p>
+            </div>
+            <button class="primary-button" type="button" data-open-booking><i data-lucide="plus"></i><span>New reservation</span></button>
+          </section>
+
+          <section class="stats-grid" aria-label="Today's hotel summary">
+            <article class="stat-card stat-arrivals">
+              <div class="stat-top"><span>Arriving today</span><i data-lucide="log-in" aria-hidden="true"></i></div>
+              <div class="stat-value" id="arrivals-count">0</div>
+              <div class="stat-foot"><span class="stat-accent" id="arrivals-note">No arrivals just yet</span><span>expected guests</span></div>
+            </article>
+            <article class="stat-card stat-occupancy">
+              <div class="stat-top"><span>In-house</span><i data-lucide="bed-double" aria-hidden="true"></i></div>
+              <div class="stat-value"><span id="occupancy-count">0</span><small> / <span id="room-total">0</span> rooms</small></div>
+              <div class="occupancy-track" role="progressbar" aria-label="Room occupancy" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="occupancy-bar"></span></div>
+            </article>
+            <article class="stat-card stat-departures">
+              <div class="stat-top"><span>Departing today</span><i data-lucide="log-out" aria-hidden="true"></i></div>
+              <div class="stat-value" id="departures-count">0</div>
+              <div class="stat-foot"><span class="stat-accent">A fond farewell</span><span>rooms to turn</span></div>
+            </article>
+            <article class="stat-card stat-available">
+              <div class="stat-top"><span>Available tonight</span><i data-lucide="key-round" aria-hidden="true"></i></div>
+              <div class="stat-value" id="available-count">0</div>
+              <div class="stat-foot"><span class="stat-accent">Ready for a guest</span><span>of <span id="available-total">0</span> rooms</span></div>
+            </article>
+          </section>
+          </div>
+          </section>
+
+          <section class="operations-grid">
+            <section class="page-view" id="view-reservations" data-page-view="reservations" aria-labelledby="reservations-title" hidden>
+              <div class="view-heading"><div><p class="overline">GUEST STAYS</p><h1>Reservations</h1><p>Manage arrivals, departures, and upcoming stays.</p></div><button class="primary-button" type="button" data-open-booking><i data-lucide="plus"></i><span>New reservation</span></button></div>
+            <section class="reservations-panel" id="reservations" aria-labelledby="reservations-title">
+              <div class="section-heading">
+                <div><p class="overline">THE DAILY BOOK</p><h2 id="reservations-title">Reservations <span class="heading-count" id="booking-count">0</span></h2></div>
+              </div>
+
+              <div class="table-tools">
+                <label class="search-field"><i data-lucide="search" aria-hidden="true"></i><input id="booking-search" type="search" placeholder="Find a guest or room" aria-label="Find a guest or room"><kbd>/</kbd></label>
+                <label class="filter-select"><span class="sr-only">Filter reservations</span><i data-lucide="list-filter" aria-hidden="true"></i><select id="status-filter"><option value="all">All bookings</option><option value="Reserved">Reserved</option><option value="Checked in">Checked in</option><option value="Checked out">Checked out</option><option value="Cancelled">Cancelled</option></select></label>
+              </div>
+
+              <div class="table-scroll">
+                <table>
+                  <thead><tr><th scope="col">GUEST</th><th scope="col">STAY</th><th scope="col">ROOM</th><th scope="col">STATUS</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+                  <tbody id="booking-rows"></tbody>
+                </table>
+                <div class="empty-state" id="empty-state" hidden><span class="empty-icon"><i data-lucide="calendar-search"></i></span><strong>No reservations found</strong><span>Try another search, or start a new reservation.</span><button class="text-button" type="button" data-open-booking>Create a reservation <i data-lucide="arrow-right"></i></button></div>
+              </div>
+              <div class="table-footer">
+                <span id="table-summary">Showing 0 reservations</span>
+                <nav class="pagination-controls" id="reservation-pagination" aria-label="Reservation pages" hidden>
+                  <button class="pagination-button" type="button" data-page-action="previous" aria-label="Previous page">Previous</button>
+                  <span id="reservation-page-label" aria-live="polite">Page 1 of 1</span>
+                  <button class="pagination-button" type="button" data-page-action="next" aria-label="Next page">Next</button>
+                </nav>
+                <span><span class="legend-dot"></span> Manila, Philippines</span>
+              </div>
+            </section>
+            </section>
+
+            <section class="page-view" id="view-rooms" data-page-view="rooms" aria-labelledby="rooms-page-title" hidden>
+              <div class="view-heading"><div><p class="overline">PROPERTY INVENTORY</p><h1 id="rooms-page-title">Rooms</h1><p>Room types, availability, and inventory management.</p></div><button class="primary-button" id="open-room-manager" type="button"><i data-lucide="settings-2"></i><span>Manage rooms</span></button></div>
+            <aside class="right-rail">
+              <section class="property-card" aria-label="The Aster property details">
+                <div class="property-image" role="img" aria-label="A sunlit boutique hotel beside a garden"></div>
+                <div class="property-card-copy"><div><span class="eyebrow">YOUR HOUSE</span><i data-lucide="map-pin" aria-hidden="true"></i></div><h2>The Aster</h2><p>Manila, Philippines</p><div class="property-details"><span><i data-lucide="door-open"></i><b id="property-room-total">0</b> rooms</span><span><i data-lucide="star"></i>Est. 1928</span></div></div>
+              </section>
+
+              <section class="room-overview" id="rooms" aria-labelledby="rooms-title">
+                <div class="rail-heading"><div><p class="overline">ROOM STATUS</p><h2 id="rooms-title">Availability tonight</h2></div><button class="icon-button small-icon-button" id="room-refresh" type="button" aria-label="Refresh room availability" title="Refresh room availability"><i data-lucide="refresh-cw"></i></button></div>
+                <div class="room-list" id="room-list"></div>
+                <div class="room-list-footer"><span class="legend-dot"></span> Available tonight</div>
+              </section>
+            </aside>
+            </section>
+
+            <section class="page-view" id="view-guests" data-page-view="guests" aria-labelledby="guests-title" hidden>
+              <div class="view-heading"><div><p class="overline">GUEST DIRECTORY</p><h1 id="guests-title">Guests <span class="heading-count" id="guest-count">0</span></h1><p>Guest profiles collected from reservation history.</p></div></div>
+              <div class="guest-directory">
+                <div class="guest-directory-toolbar"><label class="search-field"><i data-lucide="search" aria-hidden="true"></i><input id="guest-search" type="search" placeholder="Find a guest" aria-label="Find a guest"></label><span id="guest-summary">0 guests</span></div>
+                <div class="table-scroll"><table class="guest-table"><thead><tr><th scope="col">GUEST</th><th scope="col">EMAIL</th><th scope="col">PHONE</th><th scope="col">STAYS</th><th scope="col">LATEST STAY</th><th scope="col">STATUS</th></tr></thead><tbody id="guest-rows"></tbody></table>
+                  <div class="empty-state" id="guest-empty" hidden><span class="empty-icon"><i data-lucide="contact-round"></i></span><strong>No guests found</strong><span>Guests appear here when a reservation is created.</span></div>
+                </div>
+              </div>
+            </section>
+          </section>
+
+          <section class="analytics-section page-view" id="view-analytics" data-page-view="analytics" aria-labelledby="analytics-title" hidden>
+            <div class="analytics-heading">
+              <div><p class="overline">PROPERTY PERFORMANCE</p><h2 id="analytics-title">Booking analytics</h2></div>
+              <label class="analytics-range"><i data-lucide="calendar-range" aria-hidden="true"></i><span class="sr-only">Analytics period</span><select id="analytics-range"><option value="7">Next 7 days</option><option value="30" selected>Next 30 days</option><option value="90">Next 90 days</option></select></label>
+            </div>
+            <div class="analytics-metrics" id="analytics-metrics" data-view-section="analytics" aria-label="Reservation forecast metrics">
+              <article class="analytics-metric"><span><i data-lucide="banknote"></i>ROOM REVENUE FORECAST</span><strong id="analytics-revenue">₱0</strong><small id="analytics-revenue-note">Next 30 days</small></article>
+              <article class="analytics-metric"><span><i data-lucide="calendar-check"></i>EXPECTED ARRIVALS</span><strong id="analytics-arrivals">0</strong><small id="analytics-arrivals-note">Next 30 days</small></article>
+              <article class="analytics-metric"><span><i data-lucide="chart-no-axes-column-increasing"></i>AVERAGE OCCUPANCY</span><strong id="analytics-occupancy">0%</strong><small id="analytics-occupancy-note">Across 30 nights</small></article>
+            </div>
+            <article class="analytics-chart" id="analytics-revenue-chart" data-view-section="analytics" aria-labelledby="revenue-chart-title">
+              <div class="analytics-chart-heading"><div><span class="eyebrow">ROOM MIX</span><h3 id="revenue-chart-title">Forecast revenue by room type</h3></div><span class="chart-period-label" id="revenue-chart-period">Next 30 days</span></div>
+              <div class="revenue-chart" id="revenue-chart" role="list" aria-label="Revenue forecast by room category"></div>
+              <p class="analytics-footnote">Based on active reservations and current nightly rates. Cancelled bookings are excluded.</p>
+            </article>
+          </section>
+
+          <section class="page-view" id="view-administrator" data-page-view="administrator" aria-labelledby="administrator-title" hidden>
+            <div class="view-heading"><div><p class="overline">ACCOUNT & SYSTEM</p><h1 id="administrator-title">Administrator panel</h1><p>Manage your administrator profile and property data.</p></div></div>
+            <div class="admin-profile-grid" id="admin-profile-grid">
+              <section class="admin-panel-card" id="admin-profile-panel" data-admin-panel aria-labelledby="admin-profile-title">
+                <div class="admin-card-heading"><span class="admin-card-icon"><i data-lucide="user-round-cog"></i></span><div><h2 id="admin-profile-title">Administrator profile</h2><p>Update the name and role shown across your desk.</p></div></div>
+                <form id="admin-profile-form" class="admin-profile-form">
+                  <label class="field"><span>Full name <b>*</b></span><input id="admin-profile-name" name="name" autocomplete="name" maxlength="80" required></label>
+                  <label class="field"><span>Position <b>*</b></span><input id="admin-profile-position" name="position" maxlength="80" required></label>
+                  <label class="field"><span>Admin email</span><input id="admin-profile-email" type="email" value="admin@theaster.com" readonly></label>
+                  <div class="admin-profile-actions"><span id="admin-profile-status" aria-live="polite"></span><button class="primary-button" type="submit"><i data-lucide="check"></i><span>Save profile</span></button></div>
+                </form>
+              </section>
+              <section class="admin-panel-card" id="admin-tools-panel" data-admin-panel aria-labelledby="admin-tools-title">
+                <div class="admin-card-heading"><span class="admin-card-icon"><i data-lucide="settings-2"></i></span><div><h2 id="admin-tools-title">Property tools</h2><p>Manage room inventory and keep a MySQL data backup.</p></div></div>
+                <div class="admin-tool-list">
+                  <div class="admin-tool-row"><span><strong>Room inventory</strong><small id="admin-room-count">12 rooms</small></span><button class="secondary-button" id="admin-manage-rooms" type="button"><i data-lucide="door-open"></i> Manage rooms</button></div>
+                  <div class="admin-tool-row"><span><strong>Reservation data</strong><small id="admin-booking-count">0 reservations</small></span><div class="admin-tool-actions"><button class="secondary-button" id="export-admin-data" type="button"><i data-lucide="download"></i> Backup (JSON)</button><button class="secondary-button" id="export-reservations-csv" type="button"><i data-lucide="sheet"></i> Export CSV</button></div></div>
+                  <div class="admin-tool-row"><span><strong>Restore records</strong><small>Restore from a previous JSON backup</small></span><div class="admin-tool-actions"><input id="restore-admin-data-file" class="sr-only" type="file" accept=".json,application/json"><button class="secondary-button" id="restore-admin-data" type="button"><i data-lucide="upload"></i> Restore backup</button></div></div>
+                  <div class="admin-tool-row"><span><strong>Guest records</strong><small id="admin-guest-count">0 guests</small></span><i class="admin-tool-check" data-lucide="database" aria-hidden="true"></i></div>
+                </div>
+                <p class="admin-data-note"><i data-lucide="info"></i>Keep JSON backups to restore reservations, rooms, and activity stored in MySQL. CSV is for viewing reservation records in spreadsheet apps.</p>
+              </section>
+              <section class="admin-panel-card admin-account-panel" id="admin-account-panel" data-admin-panel aria-labelledby="admin-accounts-title">
+                <div class="admin-card-heading"><span class="admin-card-icon"><i data-lucide="user-round-plus"></i></span><div><h2 id="admin-accounts-title">Create another admin</h2><p>Add a separate sign-in for another administrator.</p></div></div>
+                <form id="admin-account-form" class="admin-account-form">
+                  <label class="field"><span>Full name <b>*</b></span><input name="name" autocomplete="name" maxlength="80" required></label>
+                  <label class="field"><span>Position <b>*</b></span><input name="position" maxlength="80" required></label>
+                  <label class="field"><span>Email address <b>*</b></span><input name="email" type="email" autocomplete="email" maxlength="254" required></label>
+                  <label class="field"><span>Password <b>*</b></span><input name="password" type="password" autocomplete="new-password" minlength="8" required></label>
+                  <div class="admin-account-actions"><span id="admin-account-status" role="status" aria-live="polite"></span><button class="primary-button" type="submit"><i data-lucide="user-round-plus"></i><span>Create admin</span></button></div>
+                </form>
+                <p class="admin-data-note"><i data-lucide="info"></i>Administrator passwords are hashed and stored in MySQL.</p>
+                <ul class="admin-account-list" id="admin-account-list" aria-label="Additional administrator accounts"></ul>
+              </section>
+            </div>
+            <section class="admin-panel-card admin-checked-in-panel" id="admin-checked-in-panel" data-admin-panel aria-labelledby="admin-checked-in-title">
+              <div class="admin-card-heading"><span class="admin-card-icon"><i data-lucide="bed-double"></i></span><div><h2 id="admin-checked-in-title">Checked-in guests <span class="heading-count" id="admin-checked-in-count">0</span></h2><p>Edit guest details, extend a stay, or check out while keeping the reservation history.</p></div></div>
+              <div class="table-scroll"><table class="admin-guest-table"><thead><tr><th scope="col">GUEST</th><th scope="col">ROOM</th><th scope="col">CHECK-OUT</th><th scope="col">ACTIONS</th></tr></thead><tbody id="admin-checked-in-rows"></tbody></table>
+                <div class="empty-state" id="admin-checked-in-empty" hidden><span class="empty-icon"><i data-lucide="bed-double"></i></span><strong>No checked-in guests</strong><span>Currently checked-in guests will appear here.</span></div>
+              </div>
+            </section>
+            <section class="admin-panel-card admin-activity-panel" id="admin-activity-panel" data-admin-panel aria-labelledby="admin-activity-title">
+              <div class="admin-card-heading"><span class="admin-card-icon"><i data-lucide="history"></i></span><div><h2 id="admin-activity-title">Activity history</h2><p>Recent administrator actions, saved in MySQL. The latest 500 actions are retained.</p></div></div>
+              <div class="table-scroll"><table class="admin-activity-table"><thead><tr><th scope="col">DATE & TIME</th><th scope="col">ACTIVITY</th><th scope="col">ADMINISTRATOR</th></tr></thead><tbody id="admin-activity-rows"></tbody></table>
+                <div class="empty-state" id="admin-activity-empty"><span class="empty-icon"><i data-lucide="history"></i></span><strong>No activity yet</strong><span>Administrator actions will appear here as they happen.</span></div>
+              </div>
+            </section>
+          </section>
+
+          <footer class="page-footer"><span>THE ASTER · MANILA, PHILIPPINES</span><span>MADE FOR THE ART OF STAYING</span></footer>
+        </div>
+      </main>
+    </div>
+
+    <dialog class="booking-dialog" id="administrator-lock-dialog" aria-labelledby="administrator-lock-title" aria-describedby="administrator-lock-description">
+      <form class="booking-form" id="administrator-lock-form">
+        <div class="dialog-header"><div><p class="overline">PRIVATE WORKSPACE</p><h2 id="administrator-lock-title">Unlock Administrator</h2></div></div>
+        <p class="login-intro" id="administrator-lock-description"></p>
+        <label class="field"><span>Administrator password <b>*</b></span><input id="administrator-lock-password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required></label>
+        <label class="field administrator-lock-confirm" id="administrator-lock-confirm-field" hidden><span>Confirm password <b>*</b></span><input id="administrator-lock-confirm-password" type="password" autocomplete="new-password" minlength="8" maxlength="128"></label>
+        <div class="room-form-error" id="administrator-lock-error" role="alert" hidden></div>
+        <p class="admin-data-note"><i data-lucide="info"></i>This is an extra lock for this browser. It is not a replacement for your administrator sign-in.</p>
+        <div class="dialog-footer"><span class="required-note">Locks after 15 minutes idle</span><div><button class="secondary-button" id="administrator-lock-cancel" type="button">Cancel</button><button class="primary-button submit-button" type="submit"><i data-lucide="lock-keyhole"></i><span id="administrator-lock-submit-label">Unlock</span></button></div></div>
+      </form>
+    </dialog>
+
+    <dialog class="booking-dialog" id="booking-dialog" aria-labelledby="dialog-title">
+      <form class="booking-form" id="booking-form">
+        <div class="dialog-header"><div><p class="overline">MAKE IT A STAY</p><h2 id="dialog-title">New reservation</h2></div><button class="icon-button close-dialog" type="button" aria-label="Close dialog" data-close-dialog><i data-lucide="x"></i></button></div>
+        <div class="form-section-label"><span>01</span> GUEST DETAILS</div>
+        <div class="form-grid guest-grid">
+          <label class="field full-field"><span>Guest name <b>*</b></span><input name="guest" autocomplete="name" placeholder="e.g. Sofia Bennett" required maxlength="80"></label>
+          <label class="field"><span>Email address <b>*</b></span><input name="email" type="email" autocomplete="email" placeholder="sofia@example.com" required></label>
+          <label class="field"><span>Phone <small>optional · 11 digits</small></span><input id="phone-input" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" pattern="09[0-9]{9}" placeholder="09171234567" title="Enter exactly 11 digits, starting with 09"></label>
+        </div>
+        <div class="form-section-label stay-label"><span>02</span> THE STAY</div>
+        <div class="form-grid stay-grid">
+          <label class="field"><span>Check-in <b>*</b></span><input name="checkIn" id="checkin-input" type="date" required></label>
+          <label class="field"><span>Check-out <b>*</b></span><input name="checkOut" id="checkout-input" type="date" required></label>
+          <label class="field"><span>Room type <b>*</b></span><select name="roomType" id="room-type-input" required></select></label>
+          <label class="field"><span>Guests</span><select name="guests" id="guests-input"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+        </div>
+        <div class="availability-message" id="availability-message" aria-live="polite"><i data-lucide="check-circle-2"></i><span>Select your dates to see room availability.</span></div>
+        <div class="dialog-footer"><span class="required-note"><b>*</b> Required fields</span><div><button class="secondary-button" type="button" data-close-dialog>Cancel</button><button class="primary-button submit-button" id="submit-booking" type="submit"><i data-lucide="check"></i><span>Confirm reservation</span></button></div></div>
+      </form>
+    </dialog>
+
+    <dialog class="booking-dialog rooms-dialog" id="rooms-dialog" aria-labelledby="rooms-dialog-title">
+      <div class="rooms-manager">
+        <div class="dialog-header"><div><p class="overline">PROPERTY INVENTORY</p><h2 id="rooms-dialog-title">Manage rooms</h2></div><button class="icon-button close-dialog" type="button" aria-label="Close room manager" data-close-rooms><i data-lucide="x"></i></button></div>
+        <div class="rooms-manager-toolbar"><span id="rooms-manager-summary"></span><button class="primary-button" id="add-room-button" type="button"><i data-lucide="plus"></i><span>Add room</span></button></div>
+        <div class="managed-room-list" id="managed-room-list"></div>
+      </div>
+    </dialog>
+
+    <dialog class="booking-dialog room-edit-dialog" id="room-edit-dialog" aria-labelledby="room-edit-title">
+      <form class="booking-form" id="room-form">
+        <div class="dialog-header"><div><p class="overline">PROPERTY INVENTORY</p><h2 id="room-edit-title">Add room</h2></div><button class="icon-button close-dialog" type="button" aria-label="Close room form" data-close-room-form><i data-lucide="x"></i></button></div>
+        <input id="room-original-number" name="originalNumber" type="hidden">
+        <div class="form-grid room-edit-fields">
+          <label class="field"><span>Room number <b>*</b></span><input id="room-number-input" name="roomNumber" autocomplete="off" maxlength="8" pattern="[A-Za-z0-9-]{1,8}" placeholder="e.g. 105" required></label>
+          <label class="field"><span>Room type <b>*</b></span><select id="managed-room-type-input" name="roomType" required></select></label>
+        </div>
+        <div class="room-form-error" id="room-form-error" role="alert" hidden></div>
+        <div class="dialog-footer"><span class="required-note">Rooms with active stays are locked.</span><div><button class="secondary-button" type="button" data-close-room-form>Cancel</button><button class="primary-button submit-button" type="submit"><i data-lucide="check"></i><span id="save-room-label">Add room</span></button></div></div>
+      </form>
+    </dialog>
+
+    <dialog class="booking-dialog admin-guest-dialog" id="admin-guest-dialog" aria-labelledby="admin-guest-dialog-title">
+      <form class="booking-form" id="admin-guest-form">
+        <div class="dialog-header"><div><p class="overline">IN-HOUSE GUEST</p><h2 id="admin-guest-dialog-title">Edit guest</h2></div><button class="icon-button close-dialog" type="button" aria-label="Close guest editor" data-close-admin-guest><i data-lucide="x"></i></button></div>
+        <input id="admin-guest-reservation-id" type="hidden">
+        <div class="form-grid admin-guest-fields" id="admin-guest-fields">
+          <label class="field full-field"><span>Guest name <b>*</b></span><input id="admin-guest-name" autocomplete="name" maxlength="80" required></label>
+          <label class="field"><span>Email address <b>*</b></span><input id="admin-guest-email" type="email" autocomplete="email" required></label>
+          <label class="field"><span>Phone <small>optional · 11 digits</small></span><input id="admin-guest-phone" type="tel" inputmode="numeric" autocomplete="tel-national" pattern="09[0-9]{9}" placeholder="09171234567" title="Enter exactly 11 digits, starting with 09"></label>
+        </div>
+        <label class="field admin-guest-checkout"><span id="admin-guest-checkout-label">Check-out <b>*</b></span><input id="admin-guest-checkout" type="date" required></label>
+        <p class="admin-guest-room-note" id="admin-guest-room-note"></p>
+        <div class="room-form-error" id="admin-guest-error" role="alert" hidden></div>
+        <div class="dialog-footer"><span class="required-note">Room conflicts are checked before saving.</span><div><button class="secondary-button" type="button" data-close-admin-guest>Cancel</button><button class="primary-button submit-button" type="submit"><i data-lucide="check"></i><span id="admin-guest-save-label">Save changes</span></button></div></div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
